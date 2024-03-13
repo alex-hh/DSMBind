@@ -360,7 +360,7 @@ class DrugAllAtomEnergyModel(FARigidModel):
         else:
             return (energy * mask_2D).sum(dim=(1,2))  # [B]
 
-    def gaussian_forward(self, binder, target):
+    def gaussian_forward(self, binder, target, eps=None):
         true_X, mol_batch, bind_A, _ = binder
         tgt_X, tgt_S, tgt_A, _ = target
         bind_S = self.mpn(mol2graph(mol_batch))
@@ -372,7 +372,12 @@ class DrugAllAtomEnergyModel(FARigidModel):
         tgt_A = tgt_A * (tgt_X.norm(dim=-1) > 1e-4).long()
         atom_mask = (bind_A > 0).float().unsqueeze(-1)
 
-        eps = np.random.uniform(0.1, 1.0, size=B)
+        if eps is None:
+            eps = np.random.uniform(0.1, 1.0, size=B)
+        else:
+            assert isinstance(eps, float)
+            eps = np.ones(B) * eps
+
         eps = torch.tensor(eps).float().cuda()[:,None,None,None]
         hat_t = torch.randn_like(true_X).cuda() * eps
         bind_X = true_X + hat_t * atom_mask

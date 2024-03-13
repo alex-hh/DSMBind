@@ -60,6 +60,7 @@ if __name__ == "__main__":
     parser.add_argument('--gaussian', action='store_true', default=False)
     parser.add_argument('--nosidechain', action='store_true', default=False)
     parser.add_argument('--nolm', action='store_true', default=False)
+    parser.add_argument('--noise_level', type=float, default=None)
 
     parser.add_argument('--patch_size', type=int, default=50)
     parser.add_argument('--batch_size', type=int, default=4)
@@ -109,6 +110,10 @@ if __name__ == "__main__":
         torch.save(embedding, 'embedding.ckpt')
     else:
         embedding = torch.load(args.embedding)
+
+    if args.noise_level is not None:
+        assert args.gaussian, "Single noise level only supported for gaussian model currently"
+        assert 0.1 <= args.noise_level < 1.0, "Noise level should be between 0 and 1"
 
     model = DrugDecoyModel(args).cuda() if args.decoy else DrugAllAtomEnergyModel(args).cuda()
     optimizer = torch.optim.Adam(model.parameters(), lr=args.lr)
