@@ -50,9 +50,9 @@ def pdbbind_evaluate(model, data, embedding, args):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument('--train_path', default='data/drug/full/refine.pkl')
-    parser.add_argument('--val_path', default='data/drug/full/test_equibind.pkl')
-    parser.add_argument('--test_path', default='data/drug/full/test_casf16.pkl')
+    parser.add_argument('--train_path', default='data/drug/train_refine.pkl')
+    parser.add_argument('--val_path', default='data/drug/test_equibind.pkl')
+    parser.add_argument('--test_path', default='data/drug/test_casf16.pkl')
     parser.add_argument('--save_dir', default='ckpts/tmp')
     parser.add_argument('--embedding', default=None)
 
