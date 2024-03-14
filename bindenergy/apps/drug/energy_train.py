@@ -144,6 +144,7 @@ if __name__ == "__main__":
 
         scheduler.step()
         if val_corr > best_corr:
+            print(f"Saving best model epoch {e}")
             best_corr = val_corr
             torch.save(ckpt, os.path.join(args.save_dir, f"model.best"))
 
