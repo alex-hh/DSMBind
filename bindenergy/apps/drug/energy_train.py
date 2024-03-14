@@ -45,6 +45,7 @@ def pdbbind_evaluate(model, data, embedding, args):
             pred = model.predict(binder, target)
             score.append(pred.item())
             label.append(-1.0 * entry['affinity'])
+    print("Predictions", score)
     return scipy.stats.pearsonr(score, label)[0]
 
 
@@ -120,7 +121,12 @@ if __name__ == "__main__":
     scheduler = lr_scheduler.ExponentialLR(optimizer, args.anneal_rate)
 
     best_corr = 0
+    val_corr = pdbbind_evaluate(model, val_data.data, embedding, args)
+    test_corr = pdbbind_evaluate(model, test_data.data, embedding, args)
+    print(f'Init, Corr = {val_corr:.4f} Test Corr = {test_corr:.4f}')
+
     for e in range(args.epochs):
+        # TODO print loss, lr. released checkpoint gets to lr .0008145
         model.train()
         random.shuffle(train_data.data)
         for i in trange(0, len(train_data.data), args.batch_size):

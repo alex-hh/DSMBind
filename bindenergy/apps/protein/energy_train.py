@@ -90,6 +90,7 @@ if __name__ == "__main__":
 
     step = 0
     for e in range(args.epochs):
+        # TODO: print val metrics
         random.shuffle(train_data.data)
         for i in trange(0, len(train_data.data), args.batch_size):
             model.train()
