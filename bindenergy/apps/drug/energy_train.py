@@ -130,7 +130,7 @@ if __name__ == "__main__":
             if args.nosidechain:
                 loss = model(binder, target, use_sidechain=False)
             elif args.gaussian:
-                loss = model.gaussian_forward(binder, target)
+                loss = model.gaussian_forward(binder, target, eps=args.noise_level)
             else:
                 loss = model(binder, target)
             loss.backward()

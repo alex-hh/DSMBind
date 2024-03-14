@@ -12,7 +12,9 @@ import argparse
 import os
 import pickle
 
-from bindenergy import *
+from bindenergy.data import *
+from bindenergy.models import *
+from bindenergy.utils import *
 from tqdm import tqdm, trange
 from collections import defaultdict
 
