@@ -128,9 +128,10 @@ if __name__ == "__main__":
             optimizer.step()
 
         val_corr = pdbbind_evaluate(model, val_data.data, args)
+        test_corr = pdbbind_evaluate(model, test_data.data, args)
         ckpt = (model.state_dict(), optimizer.state_dict(), args)
         torch.save(ckpt, os.path.join(args.save_dir, f"model.ckpt.{e}"))
-        print(f'Epoch {e}, Corr = {val_corr:.4f}')
+        print(f'Epoch {e}, Corr = {val_corr:.4f} Test Corr = {test_corr:.4f}')
 
         scheduler.step()
         if val_corr > best_corr:

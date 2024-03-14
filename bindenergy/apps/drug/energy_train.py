@@ -66,7 +66,7 @@ if __name__ == "__main__":
     parser.add_argument('--batch_size', type=int, default=4)
     parser.add_argument('--hidden_size', type=int, default=256)
     parser.add_argument('--esm_size', type=int, default=2560)
-    parser.add_argument('--depth', type=int, default=1)
+    parser.add_argument('--depth', type=int, default=2)
     parser.add_argument('--mpn_depth', type=int, default=3)
     parser.add_argument('--vocab_size', type=int, default=len(ATOM_TYPES))
     parser.add_argument('--dropout', type=float, default=0.1)
@@ -74,7 +74,7 @@ if __name__ == "__main__":
 
     parser.add_argument('--lr', type=float, default=1e-3)
     parser.add_argument('--epochs', type=int, default=10)
-    parser.add_argument('--seed', type=int, default=7)
+    parser.add_argument('--seed', type=int, default=6)
     parser.add_argument('--anneal_rate', type=float, default=0.95)
     parser.add_argument('--clip_norm', type=float, default=1.0)
 
@@ -138,9 +138,10 @@ if __name__ == "__main__":
             optimizer.step()
 
         val_corr = pdbbind_evaluate(model, val_data.data, embedding, args)
+        test_corr = pdbbind_evaluate(model, test_data.data, embedding, args)
         ckpt = (model.state_dict(), optimizer.state_dict(), args)
         torch.save(ckpt, os.path.join(args.save_dir, f"model.ckpt.{e}"))
-        print(f'Epoch {e}, Corr = {val_corr:.4f}')
+        print(f'Epoch {e}, Corr = {val_corr:.4f} Test Corr = {test_corr:.4f}')
 
         scheduler.step()
         if val_corr > best_corr:
